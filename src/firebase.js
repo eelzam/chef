@@ -4,13 +4,13 @@ import 'firebase/firestore'
 
 // firebase init - add your own config here
 const firebaseConfig = {
-  apiKey: '${{ secrets.FIREBASE_APIKEY }}',
+  apiKey: 'AIzaSyAOmQOw_R9dNWjly8nXC_QjdQmdXuJS-bg',
   authDomain: '',
   databaseURL: '',
   projectId: 'chef-3e027',
   storageBucket: '',
   messagingSenderId: '',
-  appId: '${{ secrets.FIREBASE_CHEF_3E027_APPID }}'
+  appId: '1:270996531952:web:f9a800add2420a4b40b035'
 }
 firebase.initializeApp(firebaseConfig)
 
