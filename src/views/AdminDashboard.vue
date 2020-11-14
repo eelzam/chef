@@ -8,22 +8,33 @@
     </transition>
     <section>
       <div class="col2">
+
+
          <div class="profile">
           <h5>{{ userProfile.name }}</h5>
           <p>{{ userProfile.title }}</p>
           <div class="create-post">
+
+
+
+
+
             <p>create a post</p>
             <form @submit.prevent>
               <!--<textarea v-model.trim="post.content"></textarea>-->
-              <text></text>
+              <input v-model.trim="post.title" placeholder="title"/>
+              <input v-model.trim="post.name" placeholder="url"/>
               <vue-editor v-model.trim="post.content"></vue-editor>
+              <Upload v-if="fullEditPost" :post="fullEditPost" dir="ltr"></Upload>
               <button @click="createPost()" :disabled="post.content === ''" class="button">post</button>
             </form>
           </div>
         </div>
         <div v-if="posts.length">
           <div v-for="post in posts" :key="post.id" class="post">
-            <h5>{{ post.userName }}</h5>
+
+            <h5><router-link :to="'/גרילמן/' + post.name">{{ post.title }}</router-link></h5>
+
             <span>{{ post.createdOn | formatDate }}</span>
             <p v-html="post.content"></p>
             <ul>
@@ -74,22 +85,31 @@ import { mapState } from 'vuex'
 import moment from 'moment'
 import CommentModal from '@/components/CommentModal'
 import DeleteModal from '@/components/DeleteModal'
-import { VueEditor } from "vue2-editor";
+import Upload from '@/components/Upload'
+import { VueEditor, Quill } from "vue2-editor";
+import { htmlEditButton } from "quill-html-edit-button";
+//import { htmlEditButton } from "quill-html-edit-button/src/quill.htmlEditButton.js"
+
+Quill.register("modules/htmlEditButton", htmlEditButton);
+
 
 export default {
   components: {
-    CommentModal, VueEditor, DeleteModal
+    CommentModal, VueEditor, DeleteModal, Upload
   },
   data() {
     return {
       editorSettings: {
         modules: {
           imageDrop: true,
-          imageResize: {}
+          imageResize: {},
+          htmlEditButton: {}
         }
       },
       post: {
-        content: ''
+        content: '',
+        title: '',
+        name: ''
       },
       showCommentModal: false,
       showDeleteModal: false,
@@ -107,12 +127,17 @@ export default {
     createPost() {
       if (this.fullEditPost) {
         this.fullEditPost.content = this.post.content
+        this.fullEditPost.title = this.post.title
+        this.fullEditPost.name = this.post.name
         this.$store.dispatch('updatePost', this.fullEditPost)
       }
       else
-        this.$store.dispatch('createPost', { content: this.post.content });
+        this.$store.dispatch('createPost', { content: this.post.content, title: this.post.title });
 
       this.post.content = '';
+      this.post.title = '';
+      this.post.name = '';
+
       this.fullEditPost = null;
     },
     toggleCommentModal(post) {
@@ -152,6 +177,8 @@ export default {
     },
     async editPost(post) {
       this.post.content = post.content
+      this.post.title = post.title
+      this.post.name = post.name
       this.fullEditPost = post
     },
     closePostModal() {

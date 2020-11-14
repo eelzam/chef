@@ -83,6 +83,7 @@ const store = new Vuex.Store({
       await fb.postsCollection.add({
         createdOn: new Date(),
         content: post.content,
+        title: post.title,
         userId: fb.auth.currentUser.uid,
         userName: state.userProfile.name,
         comments: 0,
@@ -94,7 +95,9 @@ const store = new Vuex.Store({
       // create post in firebase
       await fb.postsCollection.doc(post.id).update({
         editedOn: new Date(),
-        content: post.content
+        content: post.content,
+        title: post.title,
+        name: post.name
       })
     },
 

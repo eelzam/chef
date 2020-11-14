@@ -7,7 +7,7 @@
       <div class="col2">
         <div v-if="posts.length">
           <div v-for="post in posts" :key="post.id" class="post">
-            <h5>{{ post.userName }}</h5>
+            <h5>{{ post.title }}</h5>
             <span>{{ post.createdOn | formatDate }}</span>
             <p v-html="post.content"></p>
             <ul>
@@ -29,7 +29,7 @@
         <div class="p-container">
           <a @click="closePostModal()" class="close">close</a>
           <div class="post">
-            <h5>{{ fullPost.userName }}</h5>
+            <h5>{{ post.title }}</h5>
             <span>{{ fullPost.createdOn | formatDate }}</span>
             <p v-html="fullPost.content"></p>
             <ul>

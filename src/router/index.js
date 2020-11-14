@@ -2,9 +2,13 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Dashboard from '../views/Dashboard.vue'
 import AdminDashboard from '../views/AdminDashboard.vue'
+import SpecificBusiness from "@/views/SpecificBusiness";
 import { auth } from '../firebase'
+import SpecificBusinessB from "@/views/SpecificBusinessB";
 
 Vue.use(VueRouter)
+
+const GRILMAN = 'גרילמן';
 
 const routes = [
   {
@@ -19,6 +23,16 @@ const routes = [
     meta: {
       requiresAuth: true
     }
+  },
+  {
+    path: '/' + GRILMAN + '/:name',
+    name: 'SpecificBusiness',
+    component: SpecificBusiness,
+  },
+      {
+    path: '/zzzzz',
+    name: 'SpecificBusinessB',
+    component: SpecificBusinessB,
   },
   {
     path: '/login',

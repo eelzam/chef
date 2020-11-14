@@ -8,7 +8,7 @@ const firebaseConfig = {
   authDomain: '',
   databaseURL: '',
   projectId: 'chef-3e027',
-  storageBucket: '',
+  storageBucket: "chef-3e027.appspot.com",
   messagingSenderId: '',
   appId: '1:270996531952:web:f9a800add2420a4b40b035'
 }

@@ -234,11 +234,26 @@ header {
   }
 
   .post {
-    border: 1px solid #e6ecf0;
-    border-bottom: 0;
-    font-size: 14px;
+    font-size: 18px;
     padding: 1.5rem;
-    background: $white;
+    //background: $white;
+
+    background: rgba(256, 256, 256, 0.5);
+
+    //opacity: 0.3;
+
+    //.post * {
+    //  opacity: 1;
+    //}
+
+    -webkit-text-stroke: 1px white;
+    color: white;
+    text-shadow:
+       2px 2px 0 #000,
+     -1px -1px 0 #000,
+      1px -1px 0 #000,
+      -1px 1px 0 #000,
+       1px 1px 0 #000;
 
     &:hover {
       background: #f5f8fa;

@@ -3,7 +3,7 @@
     <section>
       <div class="col1">
         <router-link to="/">
-          <h3>Kasper</h3>
+          <h3>Corona-Time - כל הדברים השווים עד אלייך</h3>
         </router-link>
         <ul class="inline">
           <li>
