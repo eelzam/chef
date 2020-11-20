@@ -5,6 +5,7 @@ import AdminDashboard from '../views/AdminDashboard.vue'
 import SpecificBusiness from "@/views/SpecificBusiness";
 import { auth } from '../firebase'
 import SpecificBusinessB from "@/views/SpecificBusinessB";
+import SiteNavMain from "@/components/SiteNavMain";
 
 Vue.use(VueRouter)
 
@@ -27,7 +28,7 @@ const routes = [
   {
     path: '/' + GRILMAN + '/:name',
     name: 'SpecificBusiness',
-    component: SpecificBusiness,
+    components: { default: SpecificBusiness, header: SiteNavMain },
   },
       {
     path: '/zzzzz',

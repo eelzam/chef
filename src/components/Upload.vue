@@ -36,7 +36,11 @@ export default {
     },
     onUpload() {
       this.picture = null;
-      const storageRef = firebase.storage().ref(`${this.post.id}/${this.imageData.name}`).put(this.imageData);
+      var newMetadata = {
+        cacheControl: 'public,max-age=40000',
+      }
+
+      const storageRef = firebase.storage().ref(`${this.post.id}/${this.imageData.name}`).put(this.imageData, newMetadata);
       storageRef.on(`state_changed`,
           snapshot => {
             this.uploadValue = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;

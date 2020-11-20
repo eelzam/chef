@@ -24,6 +24,7 @@
               <!--<textarea v-model.trim="post.content"></textarea>-->
               <input v-model.trim="post.title" placeholder="title"/>
               <input v-model.trim="post.name" placeholder="url"/>
+              <input v-model.trim="post.urlCategory" placeholder="url category"/>
               <vue-editor v-model.trim="post.content"></vue-editor>
               <Upload v-if="fullEditPost" :post="fullEditPost" dir="ltr"></Upload>
               <button @click="createPost()" :disabled="post.content === ''" class="button">post</button>
@@ -33,7 +34,7 @@
         <div v-if="posts.length">
           <div v-for="post in posts" :key="post.id" class="post">
 
-            <h5><router-link :to="'/גרילמן/' + post.name">{{ post.title }}</router-link></h5>
+            <h5><router-link :to="'/' + post.urlCategory + '/' + post.name">{{ post.title }}</router-link></h5>
 
             <span>{{ post.createdOn | formatDate }}</span>
             <p v-html="post.content"></p>
@@ -109,7 +110,8 @@ export default {
       post: {
         content: '',
         title: '',
-        name: ''
+        name: '',
+        urlCategory: ''
       },
       showCommentModal: false,
       showDeleteModal: false,
@@ -129,14 +131,16 @@ export default {
         this.fullEditPost.content = this.post.content
         this.fullEditPost.title = this.post.title
         this.fullEditPost.name = this.post.name
+        this.fullEditPost.urlCategory = this.post.urlCategory
         this.$store.dispatch('updatePost', this.fullEditPost)
       }
       else
-        this.$store.dispatch('createPost', { content: this.post.content, title: this.post.title });
+        this.$store.dispatch('createPost', { content: this.post.content, title: this.post.title, name: this.post.name, urlCategory: this.post.urlCategory });
 
       this.post.content = '';
       this.post.title = '';
       this.post.name = '';
+      this.post.urlCategory = '';
 
       this.fullEditPost = null;
     },
@@ -179,6 +183,7 @@ export default {
       this.post.content = post.content
       this.post.title = post.title
       this.post.name = post.name
+      this.post.urlCategory = post.urlCategory
       this.fullEditPost = post
     },
     closePostModal() {

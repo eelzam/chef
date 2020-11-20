@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <SiteNav v-if="showNav"></SiteNav>
+    <router-view name="header" />
     <router-view/>
   </div>
 </template>

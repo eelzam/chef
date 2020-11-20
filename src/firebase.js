@@ -24,6 +24,7 @@ const postsCollection = db.collection('posts')
 const deletedCollection = db.collection('deletedPost')
 const commentsCollection = db.collection('comments')
 const likesCollection = db.collection('likes')
+const leadsCollection = db.collection('leads')
 
 // export utils/refs
 export {
@@ -33,5 +34,6 @@ export {
   postsCollection,
   commentsCollection,
   likesCollection,
-  deletedCollection
+  deletedCollection,
+  leadsCollection
 }

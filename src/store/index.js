@@ -86,6 +86,8 @@ const store = new Vuex.Store({
         title: post.title,
         userId: fb.auth.currentUser.uid,
         userName: state.userProfile.name,
+        name: post.name,
+        urlCategory: post.urlCategory,
         comments: 0,
         likes: 0
       })
@@ -97,7 +99,8 @@ const store = new Vuex.Store({
         editedOn: new Date(),
         content: post.content,
         title: post.title,
-        name: post.name
+        name: post.name,
+        urlCategory: post.urlCategory
       })
     },
 
