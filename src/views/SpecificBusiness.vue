@@ -17,7 +17,7 @@
 
     <div class="fullscreen-bg">
         <video loop muted autoplay poster="http://sandbox.thewikies.com/vfe-generator/images/big-buck-bunny_poster.jpg" class="fullscreen-bg__video">
-            <source src="@/assets/boaz2fix.mp4" type="video/mp4">
+            <source src="https://firebasestorage.googleapis.com/v0/b/chef-3e027.appspot.com/o/dhGYfm6IzoIhxPJ5oos8%2Fboaz2fix.mp4?alt=media&token=d9e7d23a-bdaa-4898-914e-a563efdc1510" type="video/mp4">
         </video>
     </div>
 
@@ -32,8 +32,11 @@
         </div>
 
         <div v-if="post">
-          <div class="opacity-reduce post text-center">
+          <div class="main-title post text-center">
             <h2> {{ fullPost.title }}</h2>
+            <div class="logo">
+                <img src="https://firebasestorage.googleapis.com/v0/b/chef-3e027.appspot.com/o/dhGYfm6IzoIhxPJ5oos8%2Flogo%20(1).png?alt=media&token=dedbf5f5-ce0b-4d7e-b892-dbdfc8e664d6" />
+            </div>
           </div>
 
 
@@ -70,10 +73,13 @@
         <div v-else>
           <p class="no-results">עמוד לא קיים</p>
         </div>
+
+            <LeadCapture :_post="fullPost"></LeadCapture>
+
       </div>
     </section>
 
-    <LeadCapture :_post="fullPost"></LeadCapture>
+
 
   </div>
 </template>
@@ -195,8 +201,19 @@ export default {
 
 <style lang="scss" scoped>
 
-.opacity-reduce {
+.logo {
+  width: 80px;
+  //border: 1px solid red;
+  img {
+    width: 100%;
+  }
+}
+
+.main-title {
   background: rgba(256, 256, 256, 0.8) !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .fullscreen-bg {
@@ -285,11 +302,16 @@ export default {
   //}
 
   .post h2 {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
   }
 
-  .post {
-    //padding: 1.0rem !important;
+  .logo {
+    //border: 1px solid red;
+    width: 60px;
+  }
+
+  .main-title {
+    padding: 0.1rem !important;
   }
 
   .big-spacer {

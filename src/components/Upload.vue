@@ -8,12 +8,25 @@
       <p>Progress: {{uploadValue.toFixed()+"%"}}
       <progress id="progress" :value="uploadValue" max="100" ></progress>  </p>
     </div>
-    <div v-if="imageData!=null">
+
+     <div>
+       <p>List of files</p>
+        <div v-for="file in postFiles" :key="file.url" >
+          <p>{{file.url}}</p>
+          <img class="preview" :src="file.url">
+          <br/>
+        </div>
+      </div>
+
+     <div v-if="imageData!=null">
         <img class="preview" :src="picture">
         <br>
       <button @click="onUpload">Upload</button>
     </div>
+
   </div>
+
+
 </template>
 
 <script>
@@ -25,14 +38,35 @@ export default {
     return {
       imageData: null,
       picture: null,
-      uploadValue: 0
+      uploadValue: 0,
+      postFiles: []
     }
   },
+  mounted() {
+    this.loadFiles()
+  },
+
+  watch: {
+    post: function (newVal, oldVal) { // watch it
+      console.log('Prop changed: ', newVal, ' | was: ', oldVal)
+      this.loadFiles()
+    }
+  },
+
   methods: {
     previewImage(event) {
       this.uploadValue = 0;
       this.picture = null;
       this.imageData = event.target.files[0];
+    },
+    loadFiles() {
+      this.postFiles = []
+      const storageRef = firebase.storage().ref(this.post.id);
+      storageRef.listAll().then(result => {
+        result.items.forEach(imageRef => {
+          imageRef.getDownloadURL().then(url => this.postFiles.push({url: url}))
+        });
+      })
     },
     onUpload() {
       this.picture = null;

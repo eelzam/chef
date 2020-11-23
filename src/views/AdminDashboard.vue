@@ -15,10 +15,6 @@
           <p>{{ userProfile.title }}</p>
           <div class="create-post">
 
-
-
-
-
             <p>create a post</p>
             <form @submit.prevent>
               <!--<textarea v-model.trim="post.content"></textarea>-->

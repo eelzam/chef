@@ -1,138 +1,186 @@
 <template>
   <div>
-
-             <div class="section section-contacts">
+                    <br><br>
+      <div class="section section-contacts">
               <div class="container">
                 <div class="md-layout">
                   <div v-if="!showPostContact" class="md-layout-item md-size-66 md-xsmall-size-100 mx-auto">
-                    <h2 class="text-center title">צור קשר</h2>
+                    <h2 class="text-center title">מעוניין במחיר ובפרטים?</h2>
                     <h4 class="text-center description">
-                    משרד עורכי הדין שלנו מתמחה במגוון תחומים, ולאורך השנים הצלחנו לעזור ללקוחות שלנו לנצח בתיקים החשובים להם ביותר.
+                        אנו נחזור אלייך בהקדם!
                     </h4>
-                    <br><br>
-                    <form class="contact-form">
+
                       <div class="md-layout">
                         <div class="md-layout-item md-size-50">
-                          <md-field :class="getValidationClass('name')">
-                            <label>שם</label>
-                            <md-input v-model="form.name" type="text"></md-input>
-                            <span class="md-error" v-if="!$v.form.name.required">נא למלא שם בבקשה</span>
-                            <span class="md-error" v-else-if="!$v.form.name.minlength">נא למלא שם מלא בבקשה</span>
-                          </md-field>
-                        </div>
-                        <div class="md-layout-item md-size-50">
-                          <md-field :class="getValidationClass('email')">
-                            <label>כותבת דואר אלקטרוני</label>
-                            <md-input v-model="form.email" type="email"></md-input>
-                              <span class="md-error" v-if="!$v.form.email.required">חסר כתובת אימייל</span>
-                              <span class="md-error" v-else-if="!$v.form.email.email">מייל לא תיקני</span>
-                          </md-field>
+
+                            <form @submit.prevent="submit">
+
+                              <div class="form-container">
+
+                              <div class="field">
+                                  <div class="form-group" :class="{ 'form-group--error': $v.name.$error }">
+                                    <label class="form__label">שם</label>
+                                    <input class="form__input" v-model.trim.lazy="$v.name.$model"/>
+                                  </div>
+                                  <div v-if="$v.name.$error">
+                                    <div class="error" v-if="!$v.name.required">נא למלא שם בבקשה</div>
+                                    <div class="error" v-if="!$v.name.minLength">שם חייב להכיל לפחות {{$v.name.$params.minLength.min}} תווים.</div>
+                                  </div>
+                              </div>
+
+                              <div class="field">
+                                 <div class="form-group" :class="{ 'form-group--error': $v.phone.$error }">
+                                    <label class="form__label">נייד</label>
+                                    <input class="form__input" v-model.trim.lazy="$v.phone.$model"/>
+                                  </div>
+                                  <div v-if="$v.phone.$error">
+                                    <div class="error" v-if="!$v.phone.required">נא למלא מספר נייד </div>
+                                    <div class="error" v-if="!$v.phone.minLength">נייד חייב להכיל לפחות {{$v.name.$params.minLength.min}} תווים.</div>
+                                  </div>
+                              </div>
+
+                                  <button class="button" type="submit" :disabled="submitStatus === 'PENDING'">שלח</button>
+                                  <p class="typo__p" v-if="submitStatus === 'OK'"> תודה, נהיה בקשר.</p>
+                                  <p class="typo__p" v-if="submitStatus === 'ERROR'">בבקשה למלא את הפרטים :)</p>
+                                  <p class="typo__p" v-if="submitStatus === 'PENDING'">שולח...</p>
+
+                                </div>
+                            </form>
+
+
 
                         </div>
-                      </div>
-                      <md-field maxlength="5">
-                        <label>הודעה</label>
-                        <md-textarea v-model="form.message"></md-textarea>
-                      </md-field>
-                      <br><br>
-                      <div class="md-layout">
-                        <div class="md-layout-item md-size-33 mx-auto text-center">
-                          <md-button @click="post()" class="md-success">שלח הודעה</md-button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
 
+                      </div>
+
+<!--
                     <transition name="fade">
                       <div class="description text-center" v-if="showPostContact" >
                            תודה, נהיה בקשר.
                       </div>
-                    </transition>
+                    </transition>-->
 
 
                 </div>
               </div>
             </div>
 
+         </div>
+
   </div>
 </template>
 
+
+
+
 <script>
 
-import { leadsCollection } from '@/firebase'
-  import { validationMixin } from 'vuelidate'
-  import {
-    required,
-    email,
-    minLength,
-    maxLength
-  } from 'vuelidate/lib/validators'
+import { required, minLength } from 'vuelidate/lib/validators'
+import {leadsCollection} from "@/firebase";
 
 export default {
-  name: 'LeadCapture',
-  props: ['_post'],
-  mixins: [validationMixin],
   data() {
     return {
-      form: {
-        message: null,
-        email: null,
-        name: null
-      },
+      name: '',
+      phone: '',
+      age: 0,
+      submitStatus: null,
       showPostContact: false,
-
     }
   },
   validations: {
-      form: {
-        name: {
-          required,
-          minLength: minLength(3)
-        },
-        email: {
-          required,
-          email
-        }
-      }
+    name: {
+      required,
+      minLength: minLength(4)
     },
+    phone: {
+      required,
+      minLength: minLength(10)
+    }
+  },
   methods: {
-    getValidationClass(fieldName) {
-      const field = this.$v.form[fieldName];
+    async submit() {
+      console.log('submit!')
+      this.$v.$touch()
+      if (this.$v.$invalid) {
 
-      if (field) {
-        return {
-          "md-invalid": field.$invalid && field.$dirty,
-        };
-      }
-    },
+        this.submitStatus = 'ERROR'
+      } else {
+        // do your submit logic here
+        this.submitStatus = 'PENDING'
 
-    async post() {
-      this.$v.$touch();
+        await leadsCollection.add({
+          name: this.form.name,
+          message: this.form.message,
+          email: this.form.email,
+          createdOn: new Date(),
+        })
 
-        if (!this.$v.$invalid) {
-          await leadsCollection.add({
-                name: this.form.name,
-                message: this.form.message,
-                email: this.form.email,
-                createdOn: new Date(),
-              })
-
-          this.showPostContact = true;
-        }
+        this.submitStatus = 'OK'
+        this.showPostContact = true;
 
       }
+    }
+
+
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
-.section {
-  padding: 0;
+
+.form-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row
 }
 
-.md-layout-item label {
-    text-align: right;
-    right: 0px;
-  }
+.field {
+  margin: 15px;
+  width: 25vw;
+}
+
+
+@media (max-width: 767px) {
+
+.form-container {
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+  .field {
+  margin: 5px;
+  width: 70vw;
+}
+
+}
+
+input {
+  border: 1px solid silver;
+  border-radius: 4px;
+  background: white;
+  padding: 5px 10px;
+}
+
+.dirty {
+  border-color: #5A5;
+  background: #EFE;
+}
+
+.dirty:focus {
+  outline-color: #8E8;
+}
+
+.error {
+  border-color: red;
+  background: #FDD;
+}
+
+.error:focus {
+  outline-color: #F99;
+}
+
 
 </style>

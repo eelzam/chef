@@ -5,6 +5,7 @@
   <div id="zzzz"
        style="height: 400px; width: 700px; margin-top: 100px;
               " >
+<!--
 
   <swiper ref="mySwiper" :options="swiperOptions">
     <swiper-slide>Slide 1</swiper-slide>
@@ -15,6 +16,7 @@
     <div class="swiper-pagination" slot="pagination"></div>
   </swiper>
 
+-->
 
 
   </div>
@@ -22,17 +24,17 @@
 
 <script>
 
-import 'swiper/css/swiper.css'
-import { Swiper, SwiperSlide, directive } from 'vue-awesome-swiper'
+//import 'swiper/css/swiper.css'
+//import { Swiper, SwiperSlide, directive } from 'vue-awesome-swiper'
 
 
 export default {
   components: {
-    Swiper,
-    SwiperSlide
+    //Swiper,
+    //SwiperSlide
   },
   directives: {
-    swiper: directive
+    //swiper: directive
   },
   data() {
     return {
