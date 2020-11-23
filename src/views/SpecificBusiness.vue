@@ -16,8 +16,8 @@
     </transition>
 
     <div class="fullscreen-bg">
-        <video loop muted autoplay poster="http://sandbox.thewikies.com/vfe-generator/images/big-buck-bunny_poster.jpg" class="fullscreen-bg__video">
-            <source src="https://firebasestorage.googleapis.com/v0/b/chef-3e027.appspot.com/o/dhGYfm6IzoIhxPJ5oos8%2Fboaz2fix.mp4?alt=media&token=d9e7d23a-bdaa-4898-914e-a563efdc1510" type="video/mp4">
+        <video muted autoplay poster="http://sandbox.thewikies.com/vfe-generator/images/big-buck-bunny_poster.jpg" class="fullscreen-bg__video">
+            <source src="https://firebasestorage.googleapis.com/v0/b/slava-6ea2a.appspot.com/o/boaz2fix.mp4?alt=media&token=2cb5ff11-33af-47f8-8e25-bf0d311e280e" type="video/mp4">
         </video>
     </div>
 
@@ -178,6 +178,15 @@ export default {
     init() {
       this.$video = this.$el.getElementsByTagName('video')[0]
       document.body.addEventListener('mouseup', this.mouseMoveAction, false)
+
+      var videoPlayiterations = 1;
+      this.$video.addEventListener('ended', function () {
+        if (videoPlayiterations < 2) {
+          this.play();
+          videoPlayiterations++;
+        }
+      }, false);
+
     },
     mouseMoveAction() {
       this.$video.muted = false;
