@@ -17,8 +17,12 @@
 
     <div class="fullscreen-bg">
         <video muted autoplay poster="http://sandbox.thewikies.com/vfe-generator/images/big-buck-bunny_poster.jpg" class="fullscreen-bg__video">
-            <source src="https://firebasestorage.googleapis.com/v0/b/slava-6ea2a.appspot.com/o/boaz2fix.mp4?alt=media&token=2cb5ff11-33af-47f8-8e25-bf0d311e280e" type="video/mp4">
+<!--            <source src="https://firebasestorage.googleapis.com/v0/b/chef-3e027.appspot.com/o/dhGYfm6IzoIhxPJ5oos8%2FGrillConcept.mp4?alt=media&token=9bf3d3e4-ecc0-46d0-bcbd-7ae9ccf02f2b" media="screen and (max-device-width:800px)" type="video/mp4">
+            <source src="https://firebasestorage.googleapis.com/v0/b/slava-6ea2a.appspot.com/o/boaz2fix.mp4?alt=media&token=2cb5ff11-33af-47f8-8e25-bf0d311e280e" media="screen and (min-device-width:801px)" type="video/mp4">-->
         </video>
+
+<!--      <iframe class="fullscreen-bg__video" src="https://www.youtube.com/embed/kZDsHvMZScM?controls=0&autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>-->
+
     </div>
 
 
@@ -90,6 +94,7 @@ import { mapState } from 'vuex'
 import moment from 'moment'
 import CommentModal from '@/components/CommentModal'
 import LeadCapture from "@/components/LeadCapture";
+
 
 export default {
   components: {
@@ -177,6 +182,19 @@ export default {
     },
     init() {
       this.$video = this.$el.getElementsByTagName('video')[0]
+
+      var source = document.createElement('source');
+      source.type = "video/mp4";
+
+      if (screen.width < 800) {
+        //It is a small screen
+        source.src = "https://firebasestorage.googleapis.com/v0/b/chef-3e027.appspot.com/o/dhGYfm6IzoIhxPJ5oos8%2FGrillConcept.mp4?alt=media&token=9bf3d3e4-ecc0-46d0-bcbd-7ae9ccf02f2b"
+      } else {
+        //It is a big screen or desktop
+        source.src = "https://firebasestorage.googleapis.com/v0/b/slava-6ea2a.appspot.com/o/boaz2fix.mp4?alt=media&token=2cb5ff11-33af-47f8-8e25-bf0d311e280e"
+      }
+      this.$video.appendChild(source);
+
       document.body.addEventListener('mouseup', this.mouseMoveAction, false)
 
       var videoPlayiterations = 1;
@@ -186,7 +204,6 @@ export default {
           videoPlayiterations++;
         }
       }, false);
-
     },
     mouseMoveAction() {
       this.$video.muted = false;
@@ -212,7 +229,6 @@ export default {
 
 .logo {
   width: 80px;
-  //border: 1px solid red;
   img {
     width: 100%;
   }
@@ -283,11 +299,8 @@ export default {
     position: absolute;
     bottom: 170px;
     left: 48%;
-    //transform: translate(-1500%, -100%);
-    //display: inline-block !important;
     width: auto;
     height: 50px;
-    //border: 1px solid red;
   }
 }
 
@@ -302,21 +315,14 @@ export default {
 }
 
 @media (max-width: 767px) {
-  //.fullscreen-bg {
-  //  background: url('http://dev2.slicejack.com/fullscreen-video-demo/img/videoframe.jpg') center center / cover no-repeat;
-  //}
-  //
-  //.fullscreen-bg__video {
-  //  display: none;
-  //}
 
   .post h2 {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
   }
 
   .logo {
     //border: 1px solid red;
-    width: 60px;
+    width: 55px;
   }
 
   .main-title {
