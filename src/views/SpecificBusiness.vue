@@ -1,14 +1,5 @@
 <template>
 
-
-  <!--<div class="circular" v-bind:style="{ 'background-image': 'url(' + image + ')' }"></div>-->
-<!--
-  <div dir="rtl" id="dashboard"
-       style="background-image: url('https://firebasestorage.googleapis.com/v0/b/chef-3e027.appspot.com/o/SNw7cHWrc00OSIoXDIfe%2F3882900744.jpg?alt=media&token=da3073eb-cd12-4971-a869-1f088d4ebe79');
-              background-size: cover;
-              " >
--->
-
   <div dir="rtl" id="dashboard"  >
 
     <transition name="fade">
@@ -17,14 +8,8 @@
 
     <div class="fullscreen-bg">
         <video muted autoplay poster="http://sandbox.thewikies.com/vfe-generator/images/big-buck-bunny_poster.jpg" class="fullscreen-bg__video">
-<!--            <source src="https://firebasestorage.googleapis.com/v0/b/chef-3e027.appspot.com/o/dhGYfm6IzoIhxPJ5oos8%2FGrillConcept.mp4?alt=media&token=9bf3d3e4-ecc0-46d0-bcbd-7ae9ccf02f2b" media="screen and (max-device-width:800px)" type="video/mp4">
-            <source src="https://firebasestorage.googleapis.com/v0/b/slava-6ea2a.appspot.com/o/boaz2fix.mp4?alt=media&token=2cb5ff11-33af-47f8-8e25-bf0d311e280e" media="screen and (min-device-width:801px)" type="video/mp4">-->
         </video>
-
-<!--      <iframe class="fullscreen-bg__video" src="https://www.youtube.com/embed/kZDsHvMZScM?controls=0&autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>-->
-
     </div>
-
 
     <section>
       <div class="col2">
@@ -43,43 +28,17 @@
             </div>
           </div>
 
-
-
-<!--
-         <div>
-&lt;!&ndash;          <video style="min-width: 700px" width="100%" autoplay loop muted playsinline v-on:play="videoPlay">&ndash;&gt;
-
-
-           <video id="mainVideo" autoplay loop muted playsinline v-on:play="videoPlay">
-            <source src="https://firebasestorage.googleapis.com/v0/b/chef-3e027.appspot.com/o/dhGYfm6IzoIhxPJ5oos8%2Fboaz2fix.mp4?alt=media&token=f2583160-0b48-4542-a838-c4cb23a85905" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
-        </div>
--->
-
           <div class="post">
             <p v-html="fullPost.content"></p>
-<!--            <ul>
-              <li><a @click="toggleCommentModal(fullPost)">comments {{ fullPost.comments }}</a></li>
-              <li><a @click="likePost(fullPost.id, fullPost.likes)">likes {{ fullPost.likes }}</a></li>
-              <li><a @click="viewPost(fullPost)">view full post</a></li>
-            </ul>-->
           </div>
-          <!--<div v-show="postComments.length" class="comments">
-            <div v-for="comment in postComments" :key="comment.id" class="comment">
-              <p>{{ comment.userName }}</p>
-              <span>{{ comment.createdOn | formatDate }}</span>
-              <p>{{ comment.content }}</p>
-            </div>
-          </div>-->
 
         </div>
         <div v-else>
           <p class="no-results">עמוד לא קיים</p>
         </div>
 
-            <LeadCapture :_post="fullPost"></LeadCapture>
-
+        <LeadCapture :_post="fullPost"></LeadCapture>
+        <PostGallery v-if="Object.keys(fullPost).length !== 0" :_post="fullPost"></PostGallery>
       </div>
     </section>
 
@@ -94,12 +53,13 @@ import { mapState } from 'vuex'
 import moment from 'moment'
 import CommentModal from '@/components/CommentModal'
 import LeadCapture from "@/components/LeadCapture";
-
+import PostGallery from "@/components/PostGallery";
 
 export default {
   components: {
     CommentModal,
-    LeadCapture
+    LeadCapture,
+    PostGallery
   },
   data() {
     return {
@@ -183,19 +143,9 @@ export default {
     init() {
       this.$video = this.$el.getElementsByTagName('video')[0]
 
-      var source = document.createElement('source');
-      source.type = "video/mp4";
+      this.addSourceVideoByScreenSize()
 
-      if (screen.width < 800) {
-        //It is a small screen
-        source.src = "https://firebasestorage.googleapis.com/v0/b/chef-3e027.appspot.com/o/dhGYfm6IzoIhxPJ5oos8%2FGrillConcept.mp4?alt=media&token=9bf3d3e4-ecc0-46d0-bcbd-7ae9ccf02f2b"
-      } else {
-        //It is a big screen or desktop
-        source.src = "https://firebasestorage.googleapis.com/v0/b/slava-6ea2a.appspot.com/o/boaz2fix.mp4?alt=media&token=2cb5ff11-33af-47f8-8e25-bf0d311e280e"
-      }
-      this.$video.appendChild(source);
-
-      document.body.addEventListener('mouseup', this.mouseMoveAction, false)
+      document.body.addEventListener('mouseup', this.mouseUpAction, false)
 
       var videoPlayiterations = 1;
       this.$video.addEventListener('ended', function () {
@@ -205,7 +155,21 @@ export default {
         }
       }, false);
     },
-    mouseMoveAction() {
+    addSourceVideoByScreenSize(){
+        var source = document.createElement('source');
+        source.type = "video/mp4";
+
+        if (screen.width < 800) {
+          //It is a small screen
+          source.src = "https://firebasestorage.googleapis.com/v0/b/chef-3e027.appspot.com/o/dhGYfm6IzoIhxPJ5oos8%2FGrillConcept.mp4?alt=media&token=9bf3d3e4-ecc0-46d0-bcbd-7ae9ccf02f2b"
+        } else {
+          //It is a big screen or desktop
+          source.src = "https://firebasestorage.googleapis.com/v0/b/slava-6ea2a.appspot.com/o/boaz2fix.mp4?alt=media&token=2cb5ff11-33af-47f8-8e25-bf0d311e280e"
+        }
+        this.$video.appendChild(source);
+
+    },
+    mouseUpAction() {
       this.$video.muted = false;
     },
   },

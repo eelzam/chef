@@ -1,6 +1,6 @@
 <template>
   <div>
-                    <br><br>
+         <br><br>
       <div class="section section-contacts">
               <div class="container">
                 <div class="md-layout">
@@ -17,9 +17,9 @@
 
                               <div class="form-container">
 
-                              <div class="field">
+                              <div  v-if="Step === 'FIRST'" class="field">
                                   <div class="form-group" :class="{ 'form-group--error': $v.name.$error }">
-                                    <label class="form__label">שם</label>
+                                    <label class="form__label">שם מלא</label>
                                     <input class="form__input" v-model.trim.lazy="$v.name.$model"/>
                                   </div>
                                   <div v-if="$v.name.$error">
@@ -28,38 +28,31 @@
                                   </div>
                               </div>
 
-                              <div class="field">
+                              <div v-if="Step === 'FIRST'" class="field">
                                  <div class="form-group" :class="{ 'form-group--error': $v.phone.$error }">
                                     <label class="form__label">נייד</label>
                                     <input class="form__input" v-model.trim.lazy="$v.phone.$model"/>
                                   </div>
                                   <div v-if="$v.phone.$error">
                                     <div class="error" v-if="!$v.phone.required">נא למלא מספר נייד </div>
-                                    <div class="error" v-if="!$v.phone.minLength">נייד חייב להכיל לפחות {{$v.name.$params.minLength.min}} תווים.</div>
+                                    <div class="error" v-if="!$v.phone.minLength">נייד חייב להכיל לפחות {{$v.phone.$params.minLength.min}} תווים.</div>
                                   </div>
                               </div>
 
                                   <button class="button" type="submit" :disabled="submitStatus === 'PENDING'">שלח</button>
-                                  <p class="typo__p" v-if="submitStatus === 'OK'"> תודה, נהיה בקשר.</p>
-                                  <p class="typo__p" v-if="submitStatus === 'ERROR'">בבקשה למלא את הפרטים :)</p>
-                                  <p class="typo__p" v-if="submitStatus === 'PENDING'">שולח...</p>
-
                                 </div>
+
+                                    <transition name="fade">
+                                      <p class="typo__p" v-if="submitStatus === 'OK'"> תודה, נהיה בקשר.</p>
+                                      <p class="typo__p" v-if="submitStatus === 'ERROR'">בבקשה למלא את הפרטים :)</p>
+                                      <p class="typo__p" v-if="submitStatus === 'PENDING'">שולח...</p>
+                                    </transition>
+
                             </form>
 
 
-
                         </div>
-
                       </div>
-
-<!--
-                    <transition name="fade">
-                      <div class="description text-center" v-if="showPostContact" >
-                           תודה, נהיה בקשר.
-                      </div>
-                    </transition>-->
-
 
                 </div>
               </div>
@@ -79,13 +72,16 @@ import { required, minLength } from 'vuelidate/lib/validators'
 import {leadsCollection} from "@/firebase";
 
 export default {
+  props: ['_post'],
   data() {
     return {
       name: '',
       phone: '',
       age: 0,
       submitStatus: null,
+      Step: 'FIRST',
       showPostContact: false,
+      leadDocRef: null
     }
   },
   validations: {
@@ -109,25 +105,32 @@ export default {
         // do your submit logic here
         this.submitStatus = 'PENDING'
 
-        await leadsCollection.add({
-          name: this.form.name,
-          message: this.form.message,
-          email: this.form.email,
+        this.leadDocRef = await leadsCollection.doc(this._post.id).collection("leads").add({
+          name: this.name,
+          phone: this.phone,
+          postId: this._post.id,
           createdOn: new Date(),
         })
 
+        console.log(this.leadDocRef.id)
+
         this.submitStatus = 'OK'
-        this.showPostContact = true;
+        //this.showPostContact = true;
 
       }
     }
-
-
   }
 }
 </script>
 
 <style lang="scss" scoped>
+
+form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
 
 .form-container {
   display: flex;

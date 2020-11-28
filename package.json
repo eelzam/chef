@@ -14,6 +14,7 @@
     "quill-html-edit-button": "^2.0.6",
     "tiptap": "^1.30.0",
     "vue": "^2.6.12",
+    "vue-gallery-slideshow": "^1.5.2",
     "vue-router": "^3.2.0",
     "vue-template-compiler": "^2.6.12",
     "vue2-editor": "^2.10.2",

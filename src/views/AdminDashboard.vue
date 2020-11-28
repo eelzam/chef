@@ -17,7 +17,7 @@
 
             <p>create a post</p>
             <form @submit.prevent>
-              <!--<textarea v-model.trim="post.content"></textarea>-->
+
               <input v-model.trim="post.title" placeholder="title"/>
               <input v-model.trim="post.name" placeholder="url"/>
               <input v-model.trim="post.urlCategory" placeholder="url category"/>
@@ -27,6 +27,8 @@
             </form>
           </div>
         </div>
+
+<!--        List of posts  -->
         <div v-if="posts.length">
           <div v-for="post in posts" :key="post.id" class="post">
 
